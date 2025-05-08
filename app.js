@@ -205,7 +205,6 @@ function createProjectCards() {
     // Links container
     const linksContainer = document.createElement('div');
     linksContainer.className = 'project-links';
-    linksContainer.style.width = '100%';
     
     // Demo link
     const demoLink = document.createElement('a');
@@ -215,7 +214,9 @@ function createProjectCards() {
     
     // Add appropriate icon and text based on link type
     const icon = document.createElement('i');
-    icon.style.marginRight = '0.5em';
+    icon.style.marginRight = '0.4em';
+    icon.style.fontSize = '0.9em';
+    icon.style.display = 'inline-block';
     
     // Check if link is to Gumroad store
     if (project.link.includes('gumroad.com')) {
@@ -237,7 +238,9 @@ function createProjectCards() {
     // Add GitHub icon to source code button
     const githubIcon = document.createElement('i');
     githubIcon.className = 'fa-brands fa-github';
-    githubIcon.style.marginRight = '0.5em';
+    githubIcon.style.marginRight = '0.4em';
+    githubIcon.style.fontSize = '0.9em';
+    githubIcon.style.display = 'inline-block';
     
     sourceLink.appendChild(githubIcon);
     sourceLink.appendChild(document.createTextNode(currentLang === 'en' ? 'Source Code' : 'Codice Sorgente'));
