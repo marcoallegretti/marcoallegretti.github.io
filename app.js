@@ -205,6 +205,7 @@ function createProjectCards() {
     // Links container
     const linksContainer = document.createElement('div');
     linksContainer.className = 'project-links';
+    linksContainer.style.width = '100%';
     
     // Demo link
     const demoLink = document.createElement('a');
