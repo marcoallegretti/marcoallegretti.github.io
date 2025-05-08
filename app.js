@@ -51,7 +51,7 @@ const translations = {
       web: {
         title: "Web / Mobile",
         items: [
-          { name: "Flutter", level: "Basic", levelIT: "Base", customSVG: "assets/icons/flutter.svg" },
+          { name: "Flutter", level: "Basic", levelIT: "Base", inlineSvg: '<svg xmlns="http://www.w3.org/2000/svg" aria-label="Flutter" role="img" viewBox="0 0 512 512"><g fill="currentColor"><path d="M191.45,342.89,249.11,401,407.75,241.12H292.4Z"/><path d="M292.4,66.69H407.75L162.61,313.82l-57.7-58.13Z"/></g><path fill="currentColor" d="M249.11,401l43.29,43.59H407.75L306.8,342.89Z"/><path d="M334.67,371.16,306.8,342.89,249.11,401Z" fill="currentColor"/><path d="M191.45,342.87l57.69-58.18,57.7,58.15L249.14,401Z" fill="currentColor"/></svg>' },
           { name: "Firebase / Supabase", level: "Basic", levelIT: "Base", iconClass: "fa-solid fa-database" },
           { name: "HTML/CSS/JS", level: "Basic", levelIT: "Base", iconClass: "fa-brands fa-html5" }
         ]
@@ -136,7 +136,7 @@ const translations = {
       web: {
         title: "Web / Mobile",
         items: [
-          { name: "Flutter", level: "Principiante" },
+          { name: "Flutter", level: "Principiante", inlineSvg: '<svg xmlns="http://www.w3.org/2000/svg" aria-label="Flutter" role="img" viewBox="0 0 512 512"><g fill="currentColor"><path d="M191.45,342.89,249.11,401,407.75,241.12H292.4Z"/><path d="M292.4,66.69H407.75L162.61,313.82l-57.7-58.13Z"/></g><path fill="currentColor" d="M249.11,401l43.29,43.59H407.75L306.8,342.89Z"/><path d="M334.67,371.16,306.8,342.89,249.11,401Z" fill="currentColor"/><path d="M191.45,342.87l57.69-58.18,57.7,58.15L249.14,401Z" fill="currentColor"/></svg>' },
           { name: "Firebase / Supabase", level: "Principiante" },
           { name: "HTML/CSS/JS", level: "Intermedio" }
         ]
@@ -298,22 +298,51 @@ function createTechCategory(category) {
     itemDiv.className = 'tech-item';
     
     const name = document.createElement('h4');
-    if (item.customSVG) {
+    if (item.inlineSvg) {
+      // Create icon container with inline SVG
+      const span = document.createElement('span');
+      span.className = 'tech-icon';
+      span.style.display = 'flex';
+      span.style.justifyContent = 'center';
+      span.style.alignItems = 'center';
+      span.style.width = '100%';
+      span.style.height = '24px';
+      span.style.marginBottom = '8px';
+      span.innerHTML = item.inlineSvg;
+      name.insertBefore(span, name.firstChild);
+    } else if (item.customSVG) {
+      // Create icon container first
+      const span = document.createElement('span');
+      span.className = 'tech-icon';
+      
+      // Add a placeholder while loading
+      span.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" fill="none"/></svg>';
+      name.insertBefore(span, name.firstChild);
+      
+      // Then fetch the SVG
       fetch(item.customSVG + '?v=' + Date.now())
-        .then(response => response.text())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to load SVG: ${response.status}`);
+          }
+          return response.text();
+        })
         .then(svg => {
-          const span = document.createElement('span');
-          span.className = 'tech-icon';
-          span.style.display = 'inline-block';
-          span.style.marginRight = '0.5em';
           span.innerHTML = svg;
-          name.insertBefore(span, name.firstChild);
+        })
+        .catch(error => {
+          console.error('Error loading SVG:', error);
+          // Fallback icon if SVG fails to load
+          span.innerHTML = '<i class="fa-solid fa-code"></i>';
         });
     } else if (item.iconClass) {
+      const span = document.createElement('span');
+      span.className = 'tech-icon';
+      
       const icon = document.createElement('i');
-      icon.className = item.iconClass + ' tech-icon';
-      icon.style.marginRight = '0.5em';
-      name.appendChild(icon);
+      icon.className = item.iconClass;
+      span.appendChild(icon);
+      name.insertBefore(span, name.firstChild);
     }
     name.appendChild(document.createTextNode(item.name));
     
