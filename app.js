@@ -5,6 +5,12 @@ const translations = {
     subtitle: "Web & Mobile Developer | Audio Programmer",
     description: "I design and build web, mobile, and desktop applications with a passion for audio technology. Always exploring new challenges and creative solutions.",
     discover: "Discover my projects",
+    cvSection: {
+      title: "Download My CV",
+      description: "Thank you for visiting my portfolio! Download my CV to remember to contact me for future collaborations.",
+      englishCV: "English CV (PDF)",
+      italianCV: "Italian CV (PDF)"
+    },
     contacts: [
       { label: "Email", link: "mailto:allegrettimarco.91@gmail.com" },
       { label: "GitHub", link: "https://github.com/marcoallegretti" },
@@ -84,6 +90,12 @@ const translations = {
     subtitle: "Sviluppatore Web & Mobile | Audio Programmer",
     description: "Progetto e sviluppo applicazioni web, mobile e desktop con passione per la tecnologia audio. Sempre alla ricerca di nuove sfide e soluzioni creative.",
     discover: "Scopri i miei progetti",
+    cvSection: {
+      title: "Scarica il mio CV",
+      description: "Grazie per aver visitato il mio portfolio! Scarica il mio CV per ricordarti di contattarmi per future collaborazioni.",
+      englishCV: "CV in Inglese (PDF)",
+      italianCV: "CV in Italiano (PDF)"
+    },
     contacts: [
       { label: "Email", link: "mailto:allegrettimarco.91@gmail.com" },
       { label: "GitHub", link: "https://github.com/marcoallegretti" },
@@ -425,11 +437,26 @@ function setLanguage(lang) {
   document.getElementById('description').textContent = t.description;
   document.getElementById('discover-btn').textContent = t.discover;
   
-  // Update other sections
+  // Update projects
   createProjectCards();
+  
+  // Update tech stack
   createTechStack();
+  
+  // Update what grid
   createWhatGrid();
+  
+  // Update contacts
   createContacts();
+  
+  // Update CV section
+  document.getElementById('cv-title').textContent = t.cvSection.title;
+  document.getElementById('cv-description').textContent = t.cvSection.description;
+  document.getElementById('english-cv').textContent = t.cvSection.englishCV;
+  document.getElementById('italian-cv').textContent = t.cvSection.italianCV;
+  
+  // Store language preference
+  localStorage.setItem('preferredLanguage', lang);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -443,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function () {
   new fullpage('#fullpage', {
     autoScrolling: true,
     navigation: true,
-    anchors: ['presentation', 'projects', 'tech', 'contacts'],
+    anchors: ['presentation', 'projects', 'tech', 'contacts', 'cv'],
     slidesNavigation: true,
     controlArrows: true,
     licenseKey: 'gplv3-license',
