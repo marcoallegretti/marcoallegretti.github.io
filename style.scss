@@ -1,0 +1,63 @@
+// Neumorphic palette
+$background: #E0E0E0;
+$component: #F0F0F3;
+$shadow-light: #C8D0D8;
+$shadow-dark: #A3B1C6;
+$text: #2F2F2F;
+
+body {
+  background: $background;
+  font-family: 'Inter', 'Manrope', 'Poppins', sans-serif;
+  color: $text;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.neumorphic {
+  background: $component;
+  border-radius: 24px;
+  box-shadow: 8px 8px 24px $shadow-dark, -8px -8px 24px $shadow-light;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.neumorphic-btn {
+  background: $component;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 4px 4px 12px $shadow-dark, -4px -4px 12px $shadow-light;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  color: $text;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.neumorphic-btn:active {
+  box-shadow: 2px 2px 8px $shadow-dark, -2px -2px 8px $shadow-light;
+  transform: translateY(2px);
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Project carousel and tech stack slides will be styled in detail later */
+
+#fullpage {
+  width: 100vw;
+  height: 100vh;
+}
+
+.contacts-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+// Add more styles for cards, grid, animations, etc. as needed
