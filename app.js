@@ -178,7 +178,10 @@ let currentLang = 'en';
 function createProjectCards() {
   const t = translations[currentLang];
   const projectCarousel = document.querySelector('.project-carousel');
-  projectCarousel.innerHTML = '';
+  
+  // Create a temporary container for the new content
+  const tempContainer = document.createElement('div');
+  tempContainer.className = 'temp-container';
   
   t.projects.forEach(project => {
     const card = document.createElement('div');
@@ -246,27 +249,37 @@ function createProjectCards() {
     card.appendChild(desc);
     card.appendChild(linksContainer);
     
-    projectCarousel.appendChild(card);
+    tempContainer.appendChild(card);
   });
+  
+  // Only after all content is ready, update the actual container
+  // This prevents the flash of empty content
+  projectCarousel.innerHTML = tempContainer.innerHTML;
 }
 
 // Create tech stack
 function createTechStack() {
   const t = translations[currentLang];
   const techStackDiv = document.querySelector('.tech-stack');
-  techStackDiv.innerHTML = '';
+  
+  // Create a temporary container for the new content
+  const tempContainer = document.createElement('div');
   
   // Audio category
   const audioCategory = createTechCategory(t.techStack.audio);
-  techStackDiv.appendChild(audioCategory);
+  tempContainer.appendChild(audioCategory);
   
   // Web/Mobile category
   const webCategory = createTechCategory(t.techStack.web);
-  techStackDiv.appendChild(webCategory);
+  tempContainer.appendChild(webCategory);
   
   // OS category
   const osCategory = createTechCategory(t.techStack.os);
-  techStackDiv.appendChild(osCategory);
+  tempContainer.appendChild(osCategory);
+  
+  // Only after all content is ready, update the actual container
+  // This prevents the flash of empty content
+  techStackDiv.innerHTML = tempContainer.innerHTML;
 }
 
 function createTechCategory(category) {
@@ -328,7 +341,9 @@ function createTechCategory(category) {
 function createWhatGrid() {
   const t = translations[currentLang];
   const whatGridDiv = document.querySelector('.what-grid');
-  whatGridDiv.innerHTML = '';
+  
+  // Create a temporary container for the new content
+  const tempContainer = document.createElement('div');
   
   // Looking for column
   const lookingDiv = document.createElement('div');
@@ -364,15 +379,22 @@ function createWhatGrid() {
   offeringDiv.appendChild(offeringTitle);
   offeringDiv.appendChild(offeringList);
   
-  whatGridDiv.appendChild(lookingDiv);
-  whatGridDiv.appendChild(offeringDiv);
+  // Add both columns to the temporary container
+  tempContainer.appendChild(lookingDiv);
+  tempContainer.appendChild(offeringDiv);
+  
+  // Only after all content is ready, update the actual container
+  // This prevents the flash of empty content
+  whatGridDiv.innerHTML = tempContainer.innerHTML;
 }
 
 // Create contacts
 function createContacts() {
   const t = translations[currentLang];
   const contactsDiv = document.querySelector('.contacts-content');
-  contactsDiv.innerHTML = '';
+  
+  // Create a temporary container for the new content
+  const tempContainer = document.createElement('div');
   
   t.contacts.forEach(c => {
     const btn = document.createElement('a');
@@ -383,8 +405,12 @@ function createContacts() {
     btn.textContent = c.label;
     
     btn.target = '_blank';
-    contactsDiv.appendChild(btn);
+    tempContainer.appendChild(btn);
   });
+  
+  // Only after all content is ready, update the actual container
+  // This prevents the flash of empty content
+  contactsDiv.innerHTML = tempContainer.innerHTML;
 }
 
 // Create language switcher
@@ -431,29 +457,55 @@ function setLanguage(lang) {
     }
   });
   
+  // Store current position before updating content
+  let currentSection = 0;
+  let currentSlide = 0;
+  
+  if (typeof fullpage_api !== 'undefined') {
+    currentSection = fullpage_api.getActiveSection().index;
+    const activeSlide = fullpage_api.getActiveSlide();
+    currentSlide = activeSlide ? activeSlide.index : 0;
+  }
+  
+  // Update all content without rebuilding yet
   // Update presentation section
   document.getElementById('greeting').textContent = t.greeting;
   document.getElementById('subtitle').textContent = t.subtitle;
   document.getElementById('description').textContent = t.description;
   document.getElementById('discover-btn').textContent = t.discover;
   
-  // Update projects
-  createProjectCards();
-  
-  // Update tech stack
-  createTechStack();
-  
-  // Update what grid
-  createWhatGrid();
-  
-  // Update contacts
-  createContacts();
-  
-  // Update CV section
+  // Update CV section text (doesn't require rebuilding)
   document.getElementById('cv-title').textContent = t.cvSection.title;
   document.getElementById('cv-description').textContent = t.cvSection.description;
   document.getElementById('english-cv').textContent = t.cvSection.englishCV;
   document.getElementById('italian-cv').textContent = t.cvSection.italianCV;
+  
+  // Create new content for dynamic sections but don't clear existing content yet
+  // This prevents the flash of empty content
+  
+  // First prepare new content
+  const prepareNewContent = () => {
+    // Update projects
+    createProjectCards();
+    
+    // Update tech stack
+    createTechStack();
+    
+    // Update what grid
+    createWhatGrid();
+    
+    // Update contacts
+    createContacts();
+    
+    // Make all new content immediately visible
+    document.querySelectorAll('.fade-in').forEach(el => {
+      el.style.opacity = 1;
+      el.style.transform = 'translateY(0)';
+    });
+  };
+  
+  // Execute content update with minimal visual disruption
+  prepareNewContent();
   
   // Store language preference
   localStorage.setItem('preferredLanguage', lang);
@@ -479,6 +531,15 @@ document.addEventListener('DOMContentLoaded', function () {
       // Add fade-in animation to the active section
       const section = destination.item;
       const elements = section.querySelectorAll('.fade-in');
+      elements.forEach(el => {
+        el.style.opacity = 1;
+        el.style.transform = 'translateY(0)';
+      });
+    },
+    afterSlideLoad: function(section, origin, destination, direction) {
+      // Ensure content is visible when switching slides
+      const slide = destination.item;
+      const elements = slide.querySelectorAll('.fade-in');
       elements.forEach(el => {
         el.style.opacity = 1;
         el.style.transform = 'translateY(0)';
