@@ -37,6 +37,13 @@ const translations = {
         image: "assets/images/23dsp.jpg",
         sourceCode: "https://github.com/23DSP/Audio-Plugins",
         link: "https://23dsp.gumroad.com"
+      },
+      {
+        title: "Vote Smart - Community Voting",
+        description: "A mobile application that implements and demonstrates various community voting methods, helping groups make fair and democratic decisions through different electoral systems.",
+        image: "assets/images/vote_smart.jpg",
+        sourceCode: "https://github.com/marcoallegretti/vote-smart",
+        link: "https://marcoallegretti.github.io/vote_smart/"
       }
     ],
     techStack: {
@@ -52,8 +59,8 @@ const translations = {
         title: "Web / Mobile",
         items: [
           { name: "Flutter", level: "Basic", levelIT: "Base", inlineSvg: '<svg xmlns="http://www.w3.org/2000/svg" aria-label="Flutter" role="img" viewBox="0 0 512 512"><g fill="currentColor"><path d="M191.45,342.89,249.11,401,407.75,241.12H292.4Z"/><path d="M292.4,66.69H407.75L162.61,313.82l-57.7-58.13Z"/></g><path fill="currentColor" d="M249.11,401l43.29,43.59H407.75L306.8,342.89Z"/><path d="M334.67,371.16,306.8,342.89,249.11,401Z" fill="currentColor"/><path d="M191.45,342.87l57.69-58.18,57.7,58.15L249.14,401Z" fill="currentColor"/></svg>' },
-          { name: "Firebase / Supabase", level: "Basic", levelIT: "Base", iconClass: "fa-solid fa-database" },
-          { name: "HTML/CSS/JS", level: "Basic", levelIT: "Base", iconClass: "fa-brands fa-html5" }
+          { name: "Firebase / Supabase", level: "Basic", iconClass: "fa-solid fa-database" },
+          { name: "HTML/CSS/JS", level: "Basic", iconClass: "fa-brands fa-html5" }
         ]
       },
       os: {
@@ -122,6 +129,13 @@ const translations = {
         image: "assets/images/23dsp.jpg",
         sourceCode: "https://github.com/23DSP/Audio-Plugins",
         link: "https://23dsp.gumroad.com"
+      },
+      {
+        title: "Vote Smart - Votazioni di Comunità",
+        description: "Un'app mobile che implementa e dimostra vari metodi di voto per comunità, aiutando i gruppi a prendere decisioni eque e democratiche attraverso diversi sistemi elettorali.",
+        image: "assets/images/vote_smart.jpg",
+        sourceCode: "https://github.com/marcoallegretti/vote-smart",
+        link: "https://marcoallegretti.github.io/vote_smart/"
       }
     ],
     techStack: {
@@ -138,7 +152,7 @@ const translations = {
         items: [
           { name: "Flutter", level: "Principiante", inlineSvg: '<svg xmlns="http://www.w3.org/2000/svg" aria-label="Flutter" role="img" viewBox="0 0 512 512"><g fill="currentColor"><path d="M191.45,342.89,249.11,401,407.75,241.12H292.4Z"/><path d="M292.4,66.69H407.75L162.61,313.82l-57.7-58.13Z"/></g><path fill="currentColor" d="M249.11,401l43.29,43.59H407.75L306.8,342.89Z"/><path d="M334.67,371.16,306.8,342.89,249.11,401Z" fill="currentColor"/><path d="M191.45,342.87l57.69-58.18,57.7,58.15L249.14,401Z" fill="currentColor"/></svg>' },
           { name: "Firebase / Supabase", level: "Principiante" },
-          { name: "HTML/CSS/JS", level: "Intermedio" }
+          { name: "HTML/CSS/JS", level: "Base" }
         ]
       },
       os: {
