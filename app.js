@@ -201,6 +201,10 @@ function createProjectCards() {
     const card = document.createElement('div');
     card.className = 'project-card fade-in';
     
+    // Create a container for the card content
+    const cardContent = document.createElement('div');
+    cardContent.className = 'card-content';
+    
     // Create image placeholder if no image exists yet
     let imgSrc = project.image;
     const img = document.createElement('img');
@@ -223,7 +227,7 @@ function createProjectCards() {
     // Demo link
     const demoLink = document.createElement('a');
     demoLink.href = project.link;
-    demoLink.className = 'neumorphic-btn project-btn';
+    demoLink.className = 'project-btn';
     demoLink.target = '_blank';
     
     // Add appropriate icon and text based on link type
@@ -234,11 +238,11 @@ function createProjectCards() {
     
     // Check if link is to Gumroad store
     if (project.link.includes('gumroad.com')) {
-      icon.className = 'fa-solid fa-cart-shopping'; // Shopping cart icon
+      icon.className = 'fa-solid fa-cart-shopping';
       demoLink.appendChild(icon);
       demoLink.appendChild(document.createTextNode(currentLang === 'en' ? 'Live Store' : 'Negozio'));
     } else {
-      icon.className = 'fa-solid fa-link'; // Link icon
+      icon.className = 'fa-solid fa-link';
       demoLink.appendChild(icon);
       demoLink.appendChild(document.createTextNode(currentLang === 'en' ? 'Live Demo' : 'Demo Live'));
     }
@@ -246,7 +250,7 @@ function createProjectCards() {
     // Source code link
     const sourceLink = document.createElement('a');
     sourceLink.href = project.sourceCode;
-    sourceLink.className = 'neumorphic-btn project-btn';
+    sourceLink.className = 'project-btn';
     sourceLink.target = '_blank';
     
     // Add GitHub icon to source code button
@@ -262,10 +266,12 @@ function createProjectCards() {
     linksContainer.appendChild(demoLink);
     linksContainer.appendChild(sourceLink);
     
+    // Build the card structure
     card.appendChild(img);
-    card.appendChild(title);
-    card.appendChild(desc);
-    card.appendChild(linksContainer);
+    cardContent.appendChild(title);
+    cardContent.appendChild(desc);
+    cardContent.appendChild(linksContainer);
+    card.appendChild(cardContent);
     
     tempContainer.appendChild(card);
   });
