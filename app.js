@@ -188,6 +188,31 @@ const translations = {
 
 let currentLang = 'en';
 
+// Initialize swipe indicator functionality
+function initSwipeIndicator() {
+  const carousel = document.querySelector('.project-carousel');
+  
+  // Check if user has scrolled the carousel
+  const handleScroll = () => {
+    if (carousel.scrollLeft > 10) {
+      carousel.classList.add('scrolled');
+      // Remove the event listener after first scroll
+      carousel.removeEventListener('scroll', handleScroll);
+    }
+  };
+  
+  // Add scroll event listener
+  carousel.addEventListener('scroll', handleScroll);
+  
+  // Re-show indicator if window is resized to mobile after scrolling
+  window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+      carousel.classList.remove('scrolled');
+      carousel.addEventListener('scroll', handleScroll);
+    }
+  });
+}
+
 // Create project cards
 function createProjectCards() {
   const t = translations[currentLang];
@@ -279,6 +304,9 @@ function createProjectCards() {
   // Only after all content is ready, update the actual container
   // This prevents the flash of empty content
   projectCarousel.innerHTML = tempContainer.innerHTML;
+  
+  // Initialize swipe indicator after cards are created
+  initSwipeIndicator();
 }
 
 // Create tech stack

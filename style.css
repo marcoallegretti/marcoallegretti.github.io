@@ -510,16 +510,69 @@ body {
 
 .project-carousel {
   display: flex;
+  gap: 1.5rem;
+  padding: 1rem 0;
   overflow-x: auto;
-  gap: 1rem;
-  padding: 1rem 0.5rem;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  margin: 0 -0.5rem;
-  padding-bottom: 1.5rem;
-  scroll-padding: 0 0.5rem;
-  width: calc(100% + 1rem);
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  margin: 0 -1rem;
+  padding: 1rem 1rem 4rem; /* Increased bottom padding for swipe indicator */
+  width: calc(100% + 2rem);
+  position: relative;
+}
+
+/* Swipe indicator for mobile */
+.swipe-indicator {
+  display: none;
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6B7280;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  animation: swipePulse 2s infinite;
+  pointer-events: none;
+}
+
+.swipe-indicator i {
+  margin-right: 0.5rem;
+  animation: swipeHorizontal 1.5s infinite;
+  display: inline-block;
+}
+
+@keyframes swipePulse {
+  0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+}
+
+@keyframes swipeHorizontal {
+  0%, 100% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+}
+
+/* Show swipe indicator only on mobile */
+@media (max-width: 768px) {
+  .project-carousel {
+    position: relative;
+  }
+  
+  .swipe-indicator {
+    display: block;
+  }
+  
+  /* Hide indicator after first scroll */
+  .project-carousel.scrolled .swipe-indicator {
+    display: none;
+  }
 }
 
 /* Hide scrollbar for mobile */
