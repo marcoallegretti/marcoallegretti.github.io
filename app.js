@@ -1,4 +1,7 @@
-// Multilingual text content
+/**
+ * Translation data for multilingual support
+ * Contains content for English and Italian languages
+ */
 const translations = {
   en: {
     greeting: "Hi, I'm Marco Allegretti",
@@ -213,124 +216,93 @@ function initSwipeIndicator() {
   });
 }
 
-// Create project cards
+/**
+ * Renders project cards in the carousel with expandable descriptions
+ */
 function createProjectCards() {
-  const t = translations[currentLang];
-  const projectCarousel = document.querySelector('.project-carousel');
+  const carousel = document.querySelector('.project-carousel');
+  if (!carousel) return;
+
+  const projects = translations[currentLang].projects;
   
-  // Create a temporary container for the new content
-  const tempContainer = document.createElement('div');
-  tempContainer.className = 'temp-container';
-  
-  t.projects.forEach(project => {
+  // Reset carousel while preserving the swipe indicator
+  const swipeIndicator = carousel.querySelector('.swipe-indicator');
+  carousel.innerHTML = '';
+  if (swipeIndicator) carousel.appendChild(swipeIndicator);
+
+  projects.forEach(project => {
     const card = document.createElement('div');
-    card.className = 'project-card fade-in';
+    card.className = 'project-card';
     
-    // Create a container for the card content
-    const cardContent = document.createElement('div');
-    cardContent.className = 'card-content';
-    
-    // Create image placeholder if no image exists yet
-    let imgSrc = project.image;
-    const img = document.createElement('img');
-    img.src = imgSrc;
-    img.alt = project.title;
-    img.onerror = function() {
-      this.src = 'https://via.placeholder.com/300x180?text=Project+Image';
-    };
-    
-    const title = document.createElement('h3');
-    title.textContent = project.title;
-    
-    const desc = document.createElement('p');
-    desc.textContent = project.description;
-    
-    // Links container
-    const linksContainer = document.createElement('div');
-    linksContainer.className = 'project-links';
-    
-    // Demo link
-    const demoLink = document.createElement('a');
-    demoLink.href = project.link;
-    demoLink.className = 'project-btn';
-    demoLink.target = '_blank';
-    
-    // Add appropriate icon and text based on link type
-    const icon = document.createElement('i');
-    icon.style.marginRight = '0.4em';
-    icon.style.fontSize = '0.9em';
-    icon.style.display = 'inline-block';
-    
-    // Check if link is to Gumroad store
-    if (project.link.includes('gumroad.com')) {
-      icon.className = 'fa-solid fa-cart-shopping';
-      demoLink.appendChild(icon);
-      demoLink.appendChild(document.createTextNode(currentLang === 'en' ? 'Live Store' : 'Negozio'));
-    } else {
-      icon.className = 'fa-solid fa-link';
-      demoLink.appendChild(icon);
-      demoLink.appendChild(document.createTextNode(currentLang === 'en' ? 'Live Demo' : 'Demo Live'));
+    // Identify special project types for custom handling
+    const isVoteSmart = project.title.includes('Vote Smart');
+    const isAudioPlugin = project.title.includes('Audio Plugin');
+
+    // Show read more button only for descriptions exceeding character limit
+    const needsReadMore = isVoteSmart || project.description.length > 100;
+
+    // Set correct repository URL for Vote Smart project
+    if (isVoteSmart) {
+      project.sourceCode = 'https://github.com/marcoallegretti/vote_smart';
     }
     
-    // Source code link
-    const sourceLink = document.createElement('a');
-    sourceLink.href = project.sourceCode;
-    sourceLink.className = 'project-btn';
-    sourceLink.target = '_blank';
+    card.innerHTML = `
+      <img src="${project.image}" alt="${project.title}" loading="lazy">
+      <div class="project-card-content">
+        <h3>${project.title}</h3>
+        <p class="project-card-description">${project.description}</p>
+        ${needsReadMore ? `<button class="read-more-btn">${currentLang === 'en' ? 'Read more' : 'Leggi tutto'}</button>` : ''}
+        <div class="project-card-buttons">
+          <a href="${project.link}" target="_blank" rel="noopener noreferrer" class="btn primary">
+            <i class="fas fa-external-link-alt"></i> ${isAudioPlugin ? (currentLang === 'en' ? 'Live Store' : 'Store') : (currentLang === 'en' ? 'Live Demo' : 'Demo')}
+          </a>
+          <a href="${project.sourceCode}" target="_blank" rel="noopener noreferrer" class="btn">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+        </div>
+      </div>
+    `;
     
-    // Add GitHub icon to source code button
-    const githubIcon = document.createElement('i');
-    githubIcon.className = 'fa-brands fa-github';
-    githubIcon.style.marginRight = '0.4em';
-    githubIcon.style.fontSize = '0.9em';
-    githubIcon.style.display = 'inline-block';
+    // Configure expandable description functionality
+    const readMoreBtn = card.querySelector('.read-more-btn');
+    if (readMoreBtn) {
+      readMoreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        card.classList.toggle('expanded');
+        
+        // Update button text based on expanded state
+        if (card.classList.contains('expanded')) {
+          readMoreBtn.textContent = currentLang === 'en' ? 'Read less' : 'Mostra meno';
+        } else {
+          readMoreBtn.textContent = currentLang === 'en' ? 'Read more' : 'Leggi tutto';
+        }
+      });
+    }
     
-    sourceLink.appendChild(githubIcon);
-    sourceLink.appendChild(document.createTextNode(currentLang === 'en' ? 'Source Code' : 'Codice Sorgente'));
-    
-    linksContainer.appendChild(demoLink);
-    linksContainer.appendChild(sourceLink);
-    
-    // Build the card structure
-    card.appendChild(img);
-    cardContent.appendChild(title);
-    cardContent.appendChild(desc);
-    cardContent.appendChild(linksContainer);
-    card.appendChild(cardContent);
-    
-    tempContainer.appendChild(card);
+    carousel.insertBefore(card, swipeIndicator);
   });
-  
-  // Only after all content is ready, update the actual container
-  // This prevents the flash of empty content
-  projectCarousel.innerHTML = tempContainer.innerHTML;
-  
-  // Initialize swipe indicator after cards are created
-  initSwipeIndicator();
 }
 
-// Create tech stack
+/**
+ * Renders the technology stack section with categorized skills
+ */
 function createTechStack() {
   const t = translations[currentLang];
   const techStackDiv = document.querySelector('.tech-stack');
   
-  // Create a temporary container for the new content
+  // Use temporary container to prevent content flashing during DOM updates
   const tempContainer = document.createElement('div');
-  
-  // Audio category
+
+  // Build and append each technology category
   const audioCategory = createTechCategory(t.techStack.audio);
-  tempContainer.appendChild(audioCategory);
-  
-  // Web/Mobile category
   const webCategory = createTechCategory(t.techStack.web);
-  tempContainer.appendChild(webCategory);
-  
-  // OS category
   const osCategory = createTechCategory(t.techStack.os);
+
+  tempContainer.appendChild(audioCategory);
+  tempContainer.appendChild(webCategory);
   tempContainer.appendChild(osCategory);
-  
-  // Only after all content is ready, update the actual container
-  // This prevents the flash of empty content
+
+  // Replace content only after all categories are ready
   techStackDiv.innerHTML = tempContainer.innerHTML;
 }
 
@@ -351,7 +323,7 @@ function createTechCategory(category) {
     
     const name = document.createElement('h4');
     if (item.inlineSvg) {
-      // Create icon container with inline SVG
+      // Render inline SVG icon
       const span = document.createElement('span');
       span.className = 'tech-icon';
       span.style.display = 'flex';
@@ -363,15 +335,14 @@ function createTechCategory(category) {
       span.innerHTML = item.inlineSvg;
       name.insertBefore(span, name.firstChild);
     } else if (item.customSVG) {
-      // Create icon container first
       const span = document.createElement('span');
       span.className = 'tech-icon';
       
-      // Add a placeholder while loading
+      // Display placeholder while SVG loads
       span.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" fill="none"/></svg>';
       name.insertBefore(span, name.firstChild);
       
-      // Then fetch the SVG
+      // Fetch and render external SVG with cache-busting
       fetch(item.customSVG + '?v=' + Date.now())
         .then(response => {
           if (!response.ok) {
@@ -384,7 +355,6 @@ function createTechCategory(category) {
         })
         .catch(error => {
           console.error('Error loading SVG:', error);
-          // Fallback icon if SVG fails to load
           span.innerHTML = '<i class="fa-solid fa-code"></i>';
         });
     } else if (item.iconClass) {
@@ -418,15 +388,17 @@ function createTechCategory(category) {
   return categoryDiv;
 }
 
-// Create what grid
+/**
+ * Renders the skills and interests grid section
+ */
 function createWhatGrid() {
   const t = translations[currentLang];
   const whatGridDiv = document.querySelector('.what-grid');
   
-  // Create a temporary container for the new content
+  // Use temporary container to prevent content flashing
   const tempContainer = document.createElement('div');
   
-  // Looking for column
+  // Create first column (Looking for opportunities)
   const lookingDiv = document.createElement('div');
   lookingDiv.className = 'what-column fade-in';
   
@@ -471,27 +443,41 @@ function createWhatGrid() {
 
 // Create contacts
 function createContacts() {
-  const t = translations[currentLang];
-  const contactsDiv = document.querySelector('.contacts-content');
-  
-  // Create a temporary container for the new content
-  const tempContainer = document.createElement('div');
-  
-  t.contacts.forEach(c => {
-    const btn = document.createElement('a');
-    btn.className = 'neumorphic-btn fade-in';
-    btn.href = c.link;
-    
-    // Only add the label text, no emoji
-    btn.textContent = c.label;
-    
-    btn.target = '_blank';
-    tempContainer.appendChild(btn);
-  });
-  
-  // Only after all content is ready, update the actual container
-  // This prevents the flash of empty content
-  contactsDiv.innerHTML = tempContainer.innerHTML;
+  const contactsContainer = document.querySelector('.contacts-content');
+  if (!contactsContainer) return;
+
+  const contacts = [
+    { 
+      label: translations[currentLang].contacts[0].label, 
+      link: translations[currentLang].contacts[0].link,
+      icon: 'envelope',
+      iconClass: 'fas'
+    },
+    { 
+      label: translations[currentLang].contacts[1].label, 
+      link: translations[currentLang].contacts[1].link,
+      icon: 'github',
+      iconClass: 'fab'
+    },
+    { 
+      label: translations[currentLang].contacts[2].label, 
+      link: translations[currentLang].contacts[2].link,
+      icon: 'briefcase',
+      iconClass: 'fas'
+    }
+  ];
+
+  contactsContainer.innerHTML = `
+    <h3>${currentLang === 'en' ? 'Connect with me' : 'Contattami'}</h3>
+    <div class="contact-buttons">
+      ${contacts.map(contact => `
+        <a href="${contact.link}" target="_blank" rel="noopener noreferrer" class="contact-button">
+          <i class="${contact.iconClass} fa-${contact.icon} contact-icon"></i>
+          <span class="contact-label">${contact.label}</span>
+        </a>
+      `).join('')}
+    </div>
+  `;
 }
 
 // Create language switcher
