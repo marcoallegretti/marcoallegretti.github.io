@@ -21,6 +21,13 @@ const translations = {
     ],
     projects: [
       {
+        title: "CADraft - Technical Drawing",
+        description: "A multi-platform CAD-like implementation in Flutter,",
+        image: "assets/images/CADraft.jpg",
+        sourceCode: "https://github.com/marcoallegretti/CADraft/",
+        link: "https://marcoallegretti.github.io/CADraft/"
+      },
+      {
         title: "Docu - Rich-Text Editor",
         description: "A multi-platform rich-text editor built with Flutter, available on web, mobile, and desktop.",
         image: "assets/images/docu.jpg",
@@ -112,6 +119,13 @@ const translations = {
       { label: "Fiverr", link: "https://www.fiverr.com/s/rEN5Wor" }
     ],
     projects: [
+      {
+        title: "CADraft - Technical Drawing",
+        description: "Implementazione simil-CAD in Flutter,",
+        image: "assets/images/CADraft.jpg",
+        sourceCode: "https://github.com/marcoallegretti/CADraft/",
+        link: "https://marcoallegretti.github.io/CADraft/"
+      },
       {
         title: "Docu - Editor di Testo",
         description: "Un editor di testo multipiattaforma costruito con Flutter, disponibile su web, mobile e desktop.",
